@@ -5,6 +5,7 @@ use SharkyDog\MessageBroker\Log;
 use SharkyDog\MessageBroker\ObjectDecorator;
 use SharkyDog\PrivateEmitter\PrivateEmitterTrait;
 use React\Socket\Connector;
+use React\Dns\Resolver\ResolverInterface;
 use React\EventLoop\Loop;
 
 class Client implements MSGB\ClientInterface {
@@ -21,6 +22,7 @@ class Client implements MSGB\ClientInterface {
   private $_connTimeout;
   private $_reconnInterval = 0;
   private $_reconnTimer;
+  private $_resolver = true;
   private $_closing = false;
 
   public function __construct(string $addr, int $port, string $name='') {
@@ -28,6 +30,13 @@ class Client implements MSGB\ClientInterface {
     $this->_port = $port;
     $this->_name = $name;
     $this->reconnect(2);
+  }
+
+  public function resolver($resolver) {
+    if(!is_bool($resolver) && !($resolver instanceOf ResolverInterface)) {
+      return;
+    }
+    $this->_resolver = $resolver;
   }
 
   public function on($event, callable $listener) {
@@ -60,7 +69,8 @@ class Client implements MSGB\ClientInterface {
       'unix' => false,
       'happy_eyeballs' => false,
       'timeout' => $timeout,
-      'tls' => false
+      'tls' => false,
+      'dns' => $this->_resolver
     ];
     $connector = new Connector($ctx);
 

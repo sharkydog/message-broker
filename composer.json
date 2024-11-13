@@ -11,7 +11,7 @@
   "require": {
     "php": ">=7.4",
     "sharkydog/private-emitter": "^1.0",
-    "sharkydog/http": "^1.1",
+    "sharkydog/http": "^1.2",
     "react/event-loop": "^1.5",
     "react/socket": "^1.16"
   },
