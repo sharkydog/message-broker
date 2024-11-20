@@ -45,7 +45,7 @@ class Client implements MSGB\ClientInterface {
   }
   public function once($event, callable $listener) {
     if($event == 'open' && $this->connected()) $listener();
-    $this->_PrivateEmitter_once($event, $listener);
+    else $this->_PrivateEmitter_once($event, $listener);
   }
 
   public function reconnect(int $interval) {

@@ -18,7 +18,7 @@ class Client extends WsClientDecorator implements MSGB\ClientInterface {
   }
   public function once($event, callable $listener) {
     if($event == 'open' && $this->ws->connected()) $listener();
-    parent::once($event, $listener);
+    else parent::once($event, $listener);
   }
 
   protected function _event_open() {
